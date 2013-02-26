@@ -18,16 +18,6 @@ public class IntBoard {
 		visited = new boolean[NUM_COLS*NUM_ROWS];	
 	}
 	
-	//makes a new LinkedList containing all numbers in [nums]
-	private LinkedList<Integer> makeList(int[] nums) {
-		LinkedList<Integer> list = new LinkedList<Integer>();
-		for (int num : nums) {
-			list.add(num);
-		}
-		
-		return list;
-	}
-	
 	//creates list of cells adjacent to each cell
 	public void calcAdjacencies() {
 		adjacencies.clear();

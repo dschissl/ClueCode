@@ -28,8 +28,13 @@ public class Board {
 	}
 	
 	public void loadConfigFiles() {
-		loadBoardLayout();
-		loadBoardLegend();
+		try {
+			loadBoardLayout();
+			loadBoardLegend();
+		} 
+		catch (BadConfigFormatException ex) {
+			System.err.println(ex.toString());
+		}	
 	}
 	
 	private void loadBoardLayout() throws BadConfigFormatException {
@@ -37,7 +42,7 @@ public class Board {
 			throw new BadConfigFormatException(boardLayoutLocation);
 	}
 	
-	private void loadBoardLegend() {
+	private void loadBoardLegend() throws BadConfigFormatException {
 		if (false)
 			throw new BadConfigFormatException(boardLegendLocation);
 	}
