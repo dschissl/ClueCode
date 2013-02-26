@@ -28,17 +28,6 @@ public class IntBoard {
 		return list;
 	}
 	
-	//Creates LinkedList for adjacent cells. Used in calcAdjacencies to store index
-	//of valid adjacent cells
-	private LinkedList<Integer> makeList(LinkedList<Integer> nums) {
-		LinkedList<Integer> list = new LinkedList<Integer>();
-		for (int num : nums) {
-			list.add(num);
-		}
-		
-		return list;
-	}
-	
 	//creates list of cells adjacent to each cell
 	public void calcAdjacencies() {
 		adjacencies.clear();
@@ -60,42 +49,9 @@ public class IntBoard {
 				if(i+1 < NUM_ROWS) {
 					adj.add(calcIndex(i+1,j));
 				}
-				adjacencies.add(makeList(adj));				
+				adjacencies.add(adj);				
 			}
-		}
-		
-//		//cell 0
-//		adjacencies.add(makeList(new int[] {4,1}));		
-//		//cell 1
-//		adjacencies.add(makeList(new int[] {0,5,2}));		
-//		//cell 2
-//		adjacencies.add(makeList(new int[] {1,6,3}));		
-//		//cell 3
-//		adjacencies.add(makeList(new int[] {2,7}));				
-//		//cell 4
-//		adjacencies.add(makeList(new int[] {0,8,5}));
-//		//cell 5
-//		adjacencies.add(makeList(new int[] {1,4,6,9}));		
-//		//cell 6
-//		adjacencies.add(makeList(new int[] {2,5,7,10}));	
-//		//cell 7
-//		adjacencies.add(makeList(new int[] {3,6,11}));
-//		//cell 8
-//		adjacencies.add(makeList(new int[] {4,9,12}));
-//		//cell 9
-//		adjacencies.add(makeList(new int[] {5,8,10,13}));
-//		//cell 10
-//		adjacencies.add(makeList(new int[] {6,9,11,14}));
-//		//cell 11
-//		adjacencies.add(makeList(new int[] {7,10,15}));
-//		//cell 12
-//		adjacencies.add(makeList(new int[] {8,13}));
-//		//cell 13
-//		adjacencies.add(makeList(new int[] {9,12,14}));
-//		//cell 14
-//		adjacencies.add(makeList(new int[] {10,13,15}));
-//		//cell 15
-//		adjacencies.add(makeList(new int[] {11,14}));	
+		}	
 	}
 	
 	//creates target list for cell at ([row], [col]) with [numSteps] steps
