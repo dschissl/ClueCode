@@ -5,6 +5,7 @@ import java.util.*;
 public class IntBoard {
 	
 	private static final int NUM_COLS = 4;
+	private static final int NUM_ROWS = 4;
 	private LinkedList<LinkedList<Integer>> adjacencies;
 	private Set<Integer> targets;
 	private boolean[] visited;
@@ -14,7 +15,7 @@ public class IntBoard {
 		
 		adjacencies = new LinkedList<LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
-		visited = new boolean[16];	
+		visited = new boolean[NUM_COLS*NUM_ROWS];	
 	}
 	
 	//makes a new LinkedList containing all numbers in [nums]
@@ -27,42 +28,74 @@ public class IntBoard {
 		return list;
 	}
 	
+	//Creates LinkedList for adjacent cells. Used in calcAdjacencies to store index
+	//of valid adjacent cells
+	private LinkedList<Integer> makeList(LinkedList<Integer> nums) {
+		LinkedList<Integer> list = new LinkedList<Integer>();
+		for (int num : nums) {
+			list.add(num);
+		}
+		
+		return list;
+	}
+	
 	//creates list of cells adjacent to each cell
 	public void calcAdjacencies() {
-		adjacencies.clear();	
+		adjacencies.clear();
+		//Step through each cell in the table
+		for(int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
+				LinkedList<Integer> adj = new LinkedList<Integer>();
+				//Test cells surrounding current cell for validity.  Add to adjacency list if
+				//they are valid
+				if(j - 1 >= 0) {
+					adj.add(calcIndex(i,j-1));
+				}
+				if(j + 1 < NUM_COLS) {
+					adj.add(calcIndex(i,j+1));
+				}
+				if(i-1 >= 0) {
+					adj.add(calcIndex(i-1,j));
+				}
+				if(i+1 < NUM_ROWS) {
+					adj.add(calcIndex(i+1,j));
+				}
+				adjacencies.add(makeList(adj));				
+			}
+		}
 		
-		//cell 0
-		adjacencies.add(makeList(new int[] {4,1}));		
-		//cell 1
-		adjacencies.add(makeList(new int[] {0,5,2}));		
-		//cell 2
-		adjacencies.add(makeList(new int[] {1,6,3}));		
-		//cell 3
-		adjacencies.add(makeList(new int[] {2,7}));				
-		//cell 4
-		adjacencies.add(makeList(new int[] {0,8,5}));
-		//cell 5
-		adjacencies.add(makeList(new int[] {1,4,6,9}));		
-		//cell 6
-		adjacencies.add(makeList(new int[] {2,5,7,10}));	
-		//cell 7
-		adjacencies.add(makeList(new int[] {3,6,11}));
-		//cell 8
-		adjacencies.add(makeList(new int[] {4,9,12}));
-		//cell 9
-		adjacencies.add(makeList(new int[] {5,8,10,13}));
-		//cell 10
-		adjacencies.add(makeList(new int[] {6,9,11,14}));
-		//cell 11
-		adjacencies.add(makeList(new int[] {7,10,15}));
-		//cell 12
-		adjacencies.add(makeList(new int[] {8,13}));
-		//cell 13
-		adjacencies.add(makeList(new int[] {9,12,14}));
-		//cell 14
-		adjacencies.add(makeList(new int[] {10,13,15}));
-		//cell 15
-		adjacencies.add(makeList(new int[] {11,14}));	
+//		//cell 0
+//		adjacencies.add(makeList(new int[] {4,1}));		
+//		//cell 1
+//		adjacencies.add(makeList(new int[] {0,5,2}));		
+//		//cell 2
+//		adjacencies.add(makeList(new int[] {1,6,3}));		
+//		//cell 3
+//		adjacencies.add(makeList(new int[] {2,7}));				
+//		//cell 4
+//		adjacencies.add(makeList(new int[] {0,8,5}));
+//		//cell 5
+//		adjacencies.add(makeList(new int[] {1,4,6,9}));		
+//		//cell 6
+//		adjacencies.add(makeList(new int[] {2,5,7,10}));	
+//		//cell 7
+//		adjacencies.add(makeList(new int[] {3,6,11}));
+//		//cell 8
+//		adjacencies.add(makeList(new int[] {4,9,12}));
+//		//cell 9
+//		adjacencies.add(makeList(new int[] {5,8,10,13}));
+//		//cell 10
+//		adjacencies.add(makeList(new int[] {6,9,11,14}));
+//		//cell 11
+//		adjacencies.add(makeList(new int[] {7,10,15}));
+//		//cell 12
+//		adjacencies.add(makeList(new int[] {8,13}));
+//		//cell 13
+//		adjacencies.add(makeList(new int[] {9,12,14}));
+//		//cell 14
+//		adjacencies.add(makeList(new int[] {10,13,15}));
+//		//cell 15
+//		adjacencies.add(makeList(new int[] {11,14}));	
 	}
 	
 	//creates target list for cell at ([row], [col]) with [numSteps] steps
