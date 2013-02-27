@@ -37,12 +37,12 @@ public class Board {
 		}	
 	}
 	
-	private void loadBoardLayout() throws BadConfigFormatException {
+	public void loadBoardLayout() throws BadConfigFormatException {
 		if (false)
 			throw new BadConfigFormatException(boardLayoutLocation);
 	}
 	
-	private void loadBoardLegend() throws BadConfigFormatException {
+	public void loadBoardLegend() throws BadConfigFormatException {
 		if (false)
 			throw new BadConfigFormatException(boardLegendLocation);
 	}
@@ -54,5 +54,20 @@ public class Board {
 	public RoomCell getRoomCellAt(int row, int col) {
 		return new RoomCell();
 	}
+	
+	public RoomCell getRoomCellAt(int cell) {
+		return new RoomCell();
+	}
+	
+	public Map<Character, String> getRooms() {
+		return rooms;
+	}
 
+	public int getNumRows() {
+		return numRows;
+	}
+	
+	public int getNumColumns() {
+		return numColumns;
+	}
 }
