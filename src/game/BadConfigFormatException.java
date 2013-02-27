@@ -16,6 +16,13 @@ public class BadConfigFormatException extends RuntimeException {
 		writeToLog(log, filename);
 	}
 	
+	public BadConfigFormatException(String file) {
+		super();
+		this.filename = file;
+		writeToLog(log, filename);
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "The file you provided: " + filename + " is not a valid config file";
