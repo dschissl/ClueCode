@@ -10,12 +10,6 @@ public class BadConfigFormatException extends RuntimeException {
 	private String filename;
 	private String log = "errorLog.txt";
 	
-	public BadConfigFormatException(String filename) {
-		super();
-		this.filename = filename;
-		writeToLog(log, filename);
-	}
-	
 	public BadConfigFormatException(String file) {
 		super();
 		this.filename = file;
