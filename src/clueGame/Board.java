@@ -50,17 +50,6 @@ public class Board {
 			throw new BadConfigFormatException(boardLegendLocation);
 	}
 	
-
-	public void loadRoomConfig() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void loadBoardConfig() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public int calcIndex(int row, int col) {
 		return -1;
 	}
