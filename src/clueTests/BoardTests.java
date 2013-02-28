@@ -55,22 +55,22 @@ public class BoardTests {
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());
 		
-		room = b.getRoomCellAt(11, 3);
+		room = b.getRoomCellAt(10, 3);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());
 		
-		room = b.getRoomCellAt(11, 16);
+		room = b.getRoomCellAt(9, 16);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
 		
-		room = b.getRoomCellAt(16, 15);
+		room = b.getRoomCellAt(14, 15);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
 		
-		room = b.getRoomCellAt(1, 11);
-		assertFalse(room.isDoorway());	
+		room = b.getRoomCellAt(1, 2);
+		assertFalse(room.isDoorway());
 		
-		BoardCell cell = b.getRoomCellAt(6, 12);
+		BoardCell cell = b.getRoomCellAt(17, 8);
 		assertFalse(cell.isDoorway());		
 	}
 	
@@ -83,7 +83,7 @@ public class BoardTests {
 		int numDoors = 0;
 		for (int i = 0; i < totalCells; i++)
 		{
-			BoardCell cell = b.getRoomCellAt(i);
+			BoardCell cell = b.getCellAt(i);
 			if (cell.isDoorway())
 				numDoors++;
 		}
@@ -105,7 +105,7 @@ public class BoardTests {
 		assertEquals('B', b.getRoomCellAt(0, 0).getInitial());
 		assertEquals('F', b.getRoomCellAt(17, 7).getInitial());
 		assertEquals('P', b.getRoomCellAt(2, 16).getInitial());
-		assertEquals('G', b.getRoomCellAt(1, 2).getInitial());
+		assertEquals('G', b.getRoomCellAt(10, 2).getInitial());
 		assertEquals('S', b.getRoomCellAt(NUM_ROWS-1, NUM_COLUMNS-1).getInitial());
 	}
 	
