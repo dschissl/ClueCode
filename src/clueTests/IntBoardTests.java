@@ -1,14 +1,15 @@
-package test;
+package clueTests;
 
 import java.util.LinkedList;
 import java.util.Set;
 
 import junit.framework.Assert;
 
-import game.IntBoard;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import clueGame.IntBoard;
 
 public class IntBoardTests {
 	

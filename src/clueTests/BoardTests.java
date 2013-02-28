@@ -1,4 +1,4 @@
-package test;
+package clueTests;
 
 import static org.junit.Assert.*;
 
@@ -6,13 +6,14 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 import junit.framework.Assert;
-import game.BadConfigFormatException;
-import game.Board;
-import game.BoardCell;
-import game.RoomCell;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import clueGame.BadConfigFormatException;
+import clueGame.Board;
+import clueGame.BoardCell;
+import clueGame.RoomCell;
 
 public class BoardTests {
 	

@@ -1,4 +1,4 @@
-package game;
+package clueGame;
 
 public class RoomCell extends BoardCell {
 

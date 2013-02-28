@@ -1,8 +1,9 @@
-package game;
+package clueGame;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -17,12 +18,14 @@ public class Board {
 		super();
 		
 		cells = new ArrayList<BoardCell>();
+		rooms = new HashMap<Character, String>();
 	}
 	
 	public Board(String boardLayoutPath, String boardLegendPath) {
 		super();
 		
 		cells = new ArrayList<BoardCell>();
+		rooms = new HashMap<Character, String>();
 		boardLayoutLocation = boardLayoutPath;
 		boardLegendLocation = boardLegendPath;
 	}
@@ -47,6 +50,17 @@ public class Board {
 			throw new BadConfigFormatException(boardLegendLocation);
 	}
 	
+
+	public void loadRoomConfig() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void loadBoardConfig() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public int calcIndex(int row, int col) {
 		return -1;
 	}
@@ -56,6 +70,10 @@ public class Board {
 	}
 	
 	public RoomCell getRoomCellAt(int cell) {
+		return new RoomCell();
+	}
+	
+	public BoardCell getCellAt(int cell) {
 		return new RoomCell();
 	}
 	
@@ -70,4 +88,5 @@ public class Board {
 	public int getNumColumns() {
 		return numColumns;
 	}
+
 }
