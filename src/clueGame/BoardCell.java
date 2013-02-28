@@ -2,8 +2,8 @@ package clueGame;
 
 public abstract class BoardCell {
 
-	private int row;
-	private int col;
+	protected int row;
+	protected int col;
 	
 	public boolean isWalkway() {
 		return false;
