@@ -4,9 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Board {
 	
@@ -158,6 +160,18 @@ public class Board {
 	public LinkedList<Integer> getAdjList(int calcIndex) {
 		// TODO Auto-generated method stub
 		return new LinkedList<Integer>();
+	}
+	
+	//Stub added to generate failing PathTests
+	public void calcTargets(int row, int col, int numSteps) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//Stub added to generate failing PathTests
+	public Set<BoardCell> getTargets() {
+		// TODO Auto-generated method stub
+		return new HashSet<BoardCell>();
 	}
 
 }
