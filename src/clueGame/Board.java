@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -151,6 +152,12 @@ public class Board {
 	
 	public int getNumColumns() {
 		return numColumns;
+	}
+	
+	//Stub added to generate failing PathTests
+	public LinkedList<Integer> getAdjList(int calcIndex) {
+		// TODO Auto-generated method stub
+		return new LinkedList<Integer>();
 	}
 
 }
