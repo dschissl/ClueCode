@@ -48,9 +48,10 @@ public class Board {
 	}
 	
 	public void loadBoardLayout() throws BadConfigFormatException {
+		Scanner in = null;
 		try {
 	    	FileReader reader = new FileReader(boardLayoutLocation);
-	    	Scanner in = new Scanner(reader);
+	    	in = new Scanner(reader);
 		  
 	    	String line;
 	    	int cRow = 0;
@@ -62,6 +63,8 @@ public class Board {
 		        for (String strCell : strCells) {	        	
 		        	if (strCell.length() > 1) {
 		        		//cell is a door
+		        		
+		        		//get door direction
 		        		RoomCell.DoorDirection dir = RoomCell.DoorDirection.DOWN;
 		        		switch (strCell.charAt(1)) {
 		        			case 'L': 
@@ -77,16 +80,23 @@ public class Board {
 		        				dir = RoomCell.DoorDirection.DOWN;
 		        				break;
 		        			default: 
+		        				//invalid door direction
 		        				throw new BadConfigFormatException(boardLayoutLocation);
 		        		}
 		        		
+		        		//add door cell to board
 		        		cells.add(new RoomCell(cRow, cCol, strCell.charAt(0), dir));
 		        	}
 		        	else if (strCell.equalsIgnoreCase("w")) {
 		        		//cell is a walkway
+		        		
+		        		//add walkway cell to board
 		        		cells.add(new WalkwayCell(cRow, cCol));
 		        	}
 		        	else {
+		        		//cell is a room
+		        		
+		        		//add room cell to board
 		        		cells.add(new RoomCell(cRow, cCol, strCell.charAt(0)));
 		        	}
 		        	//increment column counter
@@ -106,18 +116,44 @@ public class Board {
 		        }
 	        }
 	        //set number of rows
-	        numRows = cRow;
-	        
-	        in.close();	        
+	        numRows = cRow;      
 	    } 
 		catch (FileNotFoundException fnf_ex) {
 			System.err.println("Can't open file: " + boardLayoutLocation);
 	    }	
+		finally {
+			in.close();	
+		}
 	}
 	
 	public void loadBoardLegend() throws BadConfigFormatException {
-		if (false)
-			throw new BadConfigFormatException(boardLegendLocation);
+		Scanner in = null;
+		try {
+	    	FileReader reader = new FileReader(boardLegendLocation);
+	    	in = new Scanner(reader);
+		  
+	    	String line;
+	        while (in.hasNext()) {
+	        	line = in.nextLine();
+	        	String[] strs = line.split(",");
+	        	if (strs.length != 2) {
+	        		//bad line
+	        		throw new BadConfigFormatException(boardLegendLocation);
+	        	}
+	        	if (strs[0].length() > 1) {
+	        		//first part is not a single character
+	        		throw new BadConfigFormatException(boardLegendLocation);
+	        	}
+	        	//add new room to legend
+	        	rooms.put(strs[0].charAt(0), strs[1].trim());
+	        }
+        }
+    	catch (FileNotFoundException fnf_ex) {
+			System.err.println("Can't open file: " + boardLegendLocation);
+	    }	
+		finally {
+			in.close();	
+		}		
 	}
 	
 	public int calcIndex(int row, int col) {

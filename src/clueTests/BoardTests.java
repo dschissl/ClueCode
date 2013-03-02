@@ -23,7 +23,6 @@ public class BoardTests {
 	public static final int NUM_COLUMNS = 18;
 	private Board b;
 
-	
 	@Before
 	public void setup() {
 		b = new Board();
