@@ -14,6 +14,9 @@ public class Board {
 	
 	private ArrayList<BoardCell> cells;
 	private Map<Character, String> rooms;
+	private LinkedList<LinkedList<Integer>> adjacencies;
+	private Set<BoardCell> targets;
+	private boolean[] visited;
 	private int numRows, numColumns;
 	private String boardLayoutLocation = "boardLayout.csv", boardLegendLocation = "roomKey.txt"; //default values
 
@@ -22,8 +25,11 @@ public class Board {
 		
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character, String>();
+		adjacencies = new LinkedList<LinkedList<Integer>>();
+		targets = new HashSet<BoardCell>();
 		
 		loadConfigFiles();
+		calcAdjacencies();
 	}
 	
 	public Board(String boardLayoutPath, String boardLegendPath) {
@@ -31,10 +37,13 @@ public class Board {
 		
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character, String>();
+		adjacencies = new LinkedList<LinkedList<Integer>>();
+		targets = new HashSet<BoardCell>();
 		boardLayoutLocation = boardLayoutPath;
 		boardLegendLocation = boardLegendPath;
 		
 		loadConfigFiles();
+		calcAdjacencies();
 	}
 	
 	public void loadConfigFiles() {
@@ -204,22 +213,149 @@ public class Board {
 		return numColumns;
 	}
 	
-	//Stub added to generate failing PathTests
-	public LinkedList<Integer> getAdjList(int calcIndex) {
-		// TODO Auto-generated method stub
-		return new LinkedList<Integer>();
+	//creates list of cells adjacent to each cell
+	public void calcAdjacencies() {
+		adjacencies.clear();
+		//Step through each cell in the table
+		for(int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numColumns; j++) {
+				LinkedList<Integer> adj = new LinkedList<Integer>();
+				adjacencies.add(adj);
+				int curCell = calcIndex(i,j);
+				boolean isDoorway = cells.get(curCell).isDoorway();
+				boolean isRoom = cells.get(curCell).isRoom();
+				if (isRoom && !isDoorway) {
+					continue;
+				}
+				//Test cells surrounding current cell for validity.  Add to adjacency list if
+				//they are valid
+				if(j - 1 >= 0) {
+					int leftCell = calcIndex(i,j-1);
+					BoardCell left = cells.get(leftCell);
+					if (isDoorway) {
+						RoomCell curDoor = getRoomCellAt(curCell);
+						if (curDoor.getDoorDirection() == RoomCell.DoorDirection.LEFT) {
+							adj.add(leftCell);
+						}
+					}
+					else if (left.isWalkway()) {
+						adj.add(leftCell);
+					}				
+					else if ((left.isDoorway())) {
+						RoomCell leftDoor = getRoomCellAt(leftCell);
+						if (leftDoor.getDoorDirection() == RoomCell.DoorDirection.RIGHT) {
+							adj.add(leftCell);
+						}
+					}
+				}
+				if(j + 1 < numColumns) {
+					int rightCell = calcIndex(i,j+1);
+					BoardCell right = cells.get(rightCell);
+					if (isDoorway) {
+						RoomCell curDoor = getRoomCellAt(curCell);
+						if (curDoor.getDoorDirection() == RoomCell.DoorDirection.RIGHT) {
+							adj.add(rightCell);
+						}
+					}
+					else if (right.isWalkway()) {
+						adj.add(rightCell);
+					}				
+					else if ((right.isDoorway())) {
+						RoomCell rightDoor = getRoomCellAt(rightCell);
+						if (rightDoor.getDoorDirection() == RoomCell.DoorDirection.LEFT) {
+							adj.add(rightCell);
+						}
+					}
+				}
+				if(i-1 >= 0) {
+					int upCell = calcIndex(i-1,j);
+					BoardCell up = cells.get(upCell);
+					if (isDoorway) {
+						RoomCell curDoor = getRoomCellAt(curCell);
+						if (curDoor.getDoorDirection() == RoomCell.DoorDirection.UP) {
+							adj.add(upCell);
+						}
+					}
+					else if (up.isWalkway()) {
+						adj.add(upCell);
+					}				
+					else if ((up.isDoorway())) {
+						RoomCell upDoor = getRoomCellAt(upCell);
+						if (upDoor.getDoorDirection() == RoomCell.DoorDirection.DOWN) {
+							adj.add(upCell);
+						}
+					}
+				}
+				if(i+1 < numRows) {
+					int downCell = calcIndex(i+1,j);
+					BoardCell down = cells.get(downCell);
+					if (isDoorway) {
+						RoomCell curDoor = getRoomCellAt(curCell);
+						if (curDoor.getDoorDirection() == RoomCell.DoorDirection.DOWN) {
+							adj.add(downCell);
+						}
+					}
+					else if (down.isWalkway()) {
+						adj.add(downCell);
+					}				
+					else if ((down.isDoorway())) {
+						RoomCell downDoor = getRoomCellAt(downCell);
+						if (downDoor.getDoorDirection() == RoomCell.DoorDirection.UP) {
+							adj.add(downCell);
+						}
+					}
+				}				
+			}
+		}	
 	}
 	
-	//Stub added to generate failing PathTests
-	public void calcTargets(int row, int col, int numSteps) {
-		// TODO Auto-generated method stub
-		
+	//creates target list for cell at ([row], [col]) with [numSteps] steps
+	public void startTargets(int row, int col, int numSteps) {
+		startTargets(calcIndex(row, col), numSteps);
 	}
-
-	//Stub added to generate failing PathTests
+	
+	//creates target list for [cell] with [numSteps] steps
+	public void startTargets(int cell, int numSteps) {
+		//reset visited array
+		visited = new boolean[numColumns*numRows];
+		calcAdjacencies(); //create adjacency list
+		targets.clear(); //clear targets
+		visited[cell] = true; //set starting cell as visited
+		calcTargets(cell, numSteps); //create target list
+	}
+	
+	//used to recursively create target list
+	private void calcTargets(int row, int col, int numSteps) {
+		calcTargets(calcIndex(row, col), numSteps);
+	}
+	
+	//used to recursively create target list
+	private void calcTargets(int cell, int numSteps) {
+		LinkedList<Integer> adjacentCells = getAdjList(cell); //get all adjacent cells
+		
+		for (int adjCell : adjacentCells) {
+			//make sure adjCell has not been visited
+			if (visited[adjCell] == false) {
+				visited[adjCell] = true; //set adjCell as visited
+				if (numSteps == 1 || cells.get(adjCell).isDoorway()) {
+					targets.add(cells.get(adjCell)); //add cell at index adjCell to target list
+				}
+				else {
+					calcTargets(adjCell, (numSteps - 1)); //recursive call
+				}
+				visited[adjCell] = false; //set adjCell as not visited
+			}
+		}
+	}
+	
+	//return target list
 	public Set<BoardCell> getTargets() {
-		// TODO Auto-generated method stub
-		return new HashSet<BoardCell>();
+		return targets;
+	}
+	
+	//returns list of cells adjacent to [cell]
+	public LinkedList<Integer> getAdjList(int cell) {
+		return adjacencies.get(cell);
 	}
 
 }
