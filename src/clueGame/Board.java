@@ -39,8 +39,8 @@ public class Board {
 	
 	public void loadConfigFiles() {
 		try {
-			loadBoardLayout();
 			loadBoardLegend();
+			loadBoardLayout();		
 		} 
 		catch (BadConfigFormatException ex) {
 			System.err.println(ex.toString());
@@ -62,30 +62,37 @@ public class Board {
 		        String[] strCells = line.split(",");
 		        for (String strCell : strCells) {	        	
 		        	if (strCell.length() > 1) {
-		        		//cell is a door
+		        		//cell is a door      		
+		        		char roomChar = strCell.charAt(0);
+		        		
+		        		//make sure room key is valid (defined in legend)
+		        		if (!rooms.containsKey(roomChar))
+		        			throw new BadConfigFormatException(boardLayoutLocation);
 		        		
 		        		//get door direction
-		        		RoomCell.DoorDirection dir = RoomCell.DoorDirection.DOWN;
 		        		switch (strCell.charAt(1)) {
 		        			case 'L': 
-		        				dir = RoomCell.DoorDirection.LEFT;
+		        				//add door cell to board
+		        				cells.add(new RoomCell(cRow, cCol, roomChar, RoomCell.DoorDirection.LEFT));
 		        				break;
 		        			case 'U': 
-		        				dir = RoomCell.DoorDirection.UP;
+		        				//add door cell to board
+		        				cells.add(new RoomCell(cRow, cCol, roomChar, RoomCell.DoorDirection.UP));
 		        				break;
-		        			case 'R': 
-		        				dir = RoomCell.DoorDirection.RIGHT;
+		        			case 'R':
+		        				//add door cell to board
+		        				cells.add(new RoomCell(cRow, cCol, roomChar, RoomCell.DoorDirection.RIGHT));
 		        				break;
 		        			case 'D': 
-		        				dir = RoomCell.DoorDirection.DOWN;
+		        				//add door cell to board
+		        				cells.add(new RoomCell(cRow, cCol, roomChar, RoomCell.DoorDirection.DOWN));
 		        				break;
 		        			default: 
-		        				//invalid door direction
-		        				throw new BadConfigFormatException(boardLayoutLocation);
+		        				//invalid door direction, lets make cell a regular room cell instead
+		        				cells.add(new RoomCell(cRow, cCol, roomChar));
+		        				//throw new BadConfigFormatException(boardLayoutLocation);
+		        				break;
 		        		}
-		        		
-		        		//add door cell to board
-		        		cells.add(new RoomCell(cRow, cCol, strCell.charAt(0), dir));
 		        	}
 		        	else if (strCell.equalsIgnoreCase("w")) {
 		        		//cell is a walkway
@@ -95,9 +102,14 @@ public class Board {
 		        	}
 		        	else {
 		        		//cell is a room
+		        		char roomChar = strCell.charAt(0);
+		        		
+		        		//make sure room key is valid (defined in legend)
+		        		if (!rooms.containsKey(roomChar))
+		        			throw new BadConfigFormatException(boardLayoutLocation);
 		        		
 		        		//add room cell to board
-		        		cells.add(new RoomCell(cRow, cCol, strCell.charAt(0)));
+		        		cells.add(new RoomCell(cRow, cCol, roomChar));
 		        	}
 		        	//increment column counter
 		        	cCol++;
