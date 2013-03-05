@@ -29,7 +29,7 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		
 		loadConfigFiles();
-		calcAdjacencies();
+		calcAdjacencies();        //Calculate adjacencices when the board is initialized
 	}
 	
 	public Board(String boardLayoutPath, String boardLegendPath) {
@@ -181,6 +181,7 @@ public class Board {
 		return row*numColumns + col;
 	}
 	
+	//Row, col version of getRoomCellAt
 	public RoomCell getRoomCellAt(int row, int col) {
 		BoardCell cellAt = cells.get(calcIndex(row, col));
 		if (cellAt instanceof RoomCell)
@@ -188,7 +189,7 @@ public class Board {
 		
 		return null;
 	}
-	
+	//Cell version
 	public RoomCell getRoomCellAt(int cell) {
 		BoardCell cellAt = cells.get(cell);
 		if (cellAt instanceof RoomCell)
@@ -224,6 +225,7 @@ public class Board {
 				int curCell = calcIndex(i,j);
 				boolean isDoorway = cells.get(curCell).isDoorway();
 				boolean isRoom = cells.get(curCell).isRoom();
+				//Room cells can't have adjacencies
 				if (isRoom && !isDoorway) {
 					continue;
 				}
@@ -232,16 +234,16 @@ public class Board {
 				if(j - 1 >= 0) {
 					int leftCell = calcIndex(i,j-1);
 					BoardCell left = cells.get(leftCell);
-					if (isDoorway) {
+					if (isDoorway) {                              //Can only go out the direction you came in
 						RoomCell curDoor = getRoomCellAt(curCell);
 						if (curDoor.getDoorDirection() == RoomCell.DoorDirection.LEFT) {
 							adj.add(leftCell);
 						}
 					}
-					else if (left.isWalkway()) {
+					else if (left.isWalkway()) {    //Add all walkways to list
 						adj.add(leftCell);
 					}				
-					else if ((left.isDoorway())) {
+					else if ((left.isDoorway())) {   //Make sure door is facing the right direction
 						RoomCell leftDoor = getRoomCellAt(leftCell);
 						if (leftDoor.getDoorDirection() == RoomCell.DoorDirection.RIGHT) {
 							adj.add(leftCell);
@@ -337,7 +339,7 @@ public class Board {
 			//make sure adjCell has not been visited
 			if (visited[adjCell] == false) {
 				visited[adjCell] = true; //set adjCell as visited
-				if (numSteps == 1 || cells.get(adjCell).isDoorway()) {
+				if (numSteps == 1 || cells.get(adjCell).isDoorway()) {      //make sure doors get added to targets
 					targets.add(cells.get(adjCell)); //add cell at index adjCell to target list
 				}
 				else {
